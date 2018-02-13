@@ -5,6 +5,7 @@ import hcs.dsl.ssl.runtime.sensor.NoisableSensor;
 import hcs.dsl.ssl.runtime.sensor.Sensor;
 import org.influxdb.InfluxDB;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -21,7 +22,9 @@ public class SensorGroup implements Runnable {
         for (int i = 0; i < number; i++) {
             NoisableSensor s;
             try {
-                s = sensorClass.newInstance();
+                Constructor<? extends NoisableSensor<T>> constructor = sensorClass.getDeclaredConstructor();
+                constructor.setAccessible(true);
+                s = constructor.newInstance();
             } catch (Exception e) {
                 throw new IllegalArgumentException(e);
             }
@@ -38,7 +41,9 @@ public class SensorGroup implements Runnable {
         for (int i = 0; i < number; i++) {
             Sensor s;
             try {
-                s = sensorClass.newInstance();
+                Constructor<? extends Sensor> constructor = sensorClass.getDeclaredConstructor();
+                constructor.setAccessible(true);
+                s = constructor.newInstance();
             } catch (Exception e) {
                 throw new IllegalArgumentException(e);
             }
