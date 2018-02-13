@@ -60,6 +60,10 @@ public class Sensor<T extends Serializable> implements Runnable {
         return periodMs;
     }
 
+    public Source<T> getSource() {
+        return source;
+    }
+
     @Override
     public void run() {
         process(TimeUnit.SECONDS.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS));

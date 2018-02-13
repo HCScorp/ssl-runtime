@@ -3,6 +3,8 @@ package hcs.dsl.ssl.runtime.area;
 import hcs.dsl.ssl.runtime.noise.Noise;
 import hcs.dsl.ssl.runtime.sensor.NoisableSensor;
 import hcs.dsl.ssl.runtime.sensor.Sensor;
+import hcs.dsl.ssl.runtime.source.Pt;
+import hcs.dsl.ssl.runtime.source.RawFileSource;
 import org.influxdb.InfluxDB;
 
 import java.lang.reflect.Constructor;
@@ -67,7 +69,12 @@ public class SensorGroup implements Runnable {
 
     public void process(long start, long end) {
         start = TimeUnit.MILLISECONDS.convert(start, TimeUnit.SECONDS);
-        end   = TimeUnit.MILLISECONDS.convert(end, TimeUnit.SECONDS);
+        end = TimeUnit.MILLISECONDS.convert(end, TimeUnit.SECONDS);
+
+        if (sensors.get(0).getSource() instanceof RawFileSource) {
+            processSourceFileRaw();
+            return;
+        }
 
         long period = sensors.get(0).getPeriodMs();
 
@@ -76,6 +83,16 @@ public class SensorGroup implements Runnable {
         for (long i = start; i < end; i += period) {
             for (Sensor s : sensors) {
                 s.process(TimeUnit.SECONDS.convert(i, TimeUnit.MILLISECONDS));
+            }
+        }
+    }
+
+    private void processSourceFileRaw() {
+        System.out.println("Start feeding InfluxDB for sensors " + sensors.get(0).getName() + "");
+        RawFileSource rfs = (RawFileSource) sensors.get(0).getSource();
+        for (Sensor s : sensors) {
+            for (Pt pt : rfs.values) {
+                s.process(pt.timestamp);
             }
         }
     }
