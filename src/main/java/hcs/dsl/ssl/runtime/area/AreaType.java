@@ -2,6 +2,9 @@ package hcs.dsl.ssl.runtime.area;
 
 import org.influxdb.InfluxDB;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class AreaType implements Runnable {
 
@@ -37,8 +40,19 @@ public class AreaType implements Runnable {
 
     @Override
     public void run() {
+        List<Thread> threads = new ArrayList<>();
         for (SensorGroup sg : sensorGroups) {
-            new Thread(sg).start();
+            Thread t = new Thread(sg);
+            threads.add(t);
+            t.start();
+        }
+
+        try {
+            for (Thread t : threads) {
+                t.join();
+            }
+        } catch (InterruptedException e) {
+            // TODO log?
         }
     }
 }

@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Exec implements Runnable {
@@ -47,8 +49,21 @@ public class Exec implements Runnable {
         influxDB.disableBatch();
 
         applyOffset(conf.getOffset());
+
+
+        List<Thread> threads = new ArrayList<>();
         for (AreaInstance ai : areaInstances) {
-            new Thread(ai).start();
+            Thread t = new Thread(ai);
+            threads.add(t);
+            t.start();
+        }
+
+        try {
+            for (Thread t : threads) {
+                t.join();
+            }
+        } catch (InterruptedException e) {
+            // TODO log?
         }
 
         try {
