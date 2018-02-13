@@ -12,6 +12,10 @@ public class NoisableSensor<T extends Number> extends Sensor<T> {
         this.noise = noise;
     }
 
+    public NoisableSensor(String name, Source<T> source, long period) {
+        this(name, source, period, null);
+    }
+
     public void setNoise(Noise<T> noise) {
         this.noise = noise;
     }
