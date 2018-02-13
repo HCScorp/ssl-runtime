@@ -72,6 +72,7 @@ public class Sensor<T extends Serializable> implements Runnable {
                 .tag("areaType", areaType)
                 .tag("areaInstance", areaInstance)
                 .tag("exec", exec)
+                .tag("id", Integer.toString(java.lang.System.identityHashCode(this)))
                 .time(timestamp, TimeUnit.SECONDS);
 
         if (val instanceof Number) {

@@ -61,7 +61,7 @@ public class Exec implements Runnable {
     private void runReplay() {
         applyOffset(conf.getStart());
 
-        influxDB.enableBatch(200, 2, TimeUnit.SECONDS);
+        influxDB.enableBatch(1000, 2, TimeUnit.SECONDS);
 
         LocalDateTime start = LocalDateTime.parse(conf.getStart(), DTF);
         LocalDateTime end = LocalDateTime.parse(conf.getEnd(), DTF);
