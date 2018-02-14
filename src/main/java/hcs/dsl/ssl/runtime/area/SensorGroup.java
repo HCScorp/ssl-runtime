@@ -100,6 +100,9 @@ public class SensorGroup implements Runnable {
 
     private void processSourceFileRaw() {
         System.out.println("Start feeding InfluxDB for sensors " + sensors.get(0).getName() + "");
+
+        // TODO offset handling
+
         RawFileLaw rfs = (RawFileLaw) sensors.get(0).getSource();
         for (Sensor s : sensors) {
             for (Pt pt : rfs.values) {

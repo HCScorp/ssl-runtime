@@ -15,6 +15,11 @@ public abstract class FunctionLaw<T extends Serializable> extends Law<T> {
     private class CondExpr {
         private Expression condition;
         private Expression expression;
+
+        CondExpr(String condition, String expression) {
+            this.condition = new Expression(condition);
+            this.expression = new Expression(expression);
+        }
     }
 
     private final List<CondExpr> condExprList;
@@ -24,39 +29,7 @@ public abstract class FunctionLaw<T extends Serializable> extends Law<T> {
     }
 
     protected void addCase(String condition, String expression) {
-        CondExpr ce = new CondExpr();
-
-        checkCondition(condition, ce);
-        checkExpression(expression, ce);
-
-        this.condExprList.add(ce);
-    }
-
-    private void checkCondition(String condition, CondExpr ce) {
-        if (TIMESTAMP_VAR.equals(condition)) {
-            condition = "TRUE";
-        }
-
-        Expression cond = new Expression(condition);
-
-        if (!cond.isBoolean() && !condition.equals("TRUE")) {
-            throw new IllegalArgumentException("condition \"" + condition + "\" must be a boolean expression (e.g. TRUE) or 'x'");
-        }
-
-        if (cond.getUsedVariables().size() > 0 && !cond.getUsedVariables().contains(TIMESTAMP_VAR)) {
-            throw new IllegalArgumentException("condition \"" + condition + "\" must only use the variable " + TIMESTAMP_VAR + " that represent the timestamp");
-        }
-
-        cond.with(TIMESTAMP_VAR, BigDecimal.ZERO).eval();
-
-        ce.condition = cond;
-    }
-
-    private void checkExpression(String expression, CondExpr ce) {
-        Expression expr = new Expression(expression);
-        expr.with(TIMESTAMP_VAR, BigDecimal.ZERO).eval();
-
-        ce.expression = expr;
+        this.condExprList.add(new CondExpr(condition, expression));
     }
 
     @Override

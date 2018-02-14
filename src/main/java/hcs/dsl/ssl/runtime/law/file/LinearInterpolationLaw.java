@@ -23,6 +23,8 @@ public abstract class LinearInterpolationLaw<T extends Number> extends Law<T> {
     }
 
     protected BigDecimal eval(long timestamp) {
+        // TODO save the minimum timestamp for offset
+
         timestamp = timeMetadata.apply(timestamp);
         BigDecimal val = expression.with(TIMESTAMP_VAR, BigDecimal.valueOf(timestamp)).eval();
         return restriction != null ? restriction.apply(val) : val;
