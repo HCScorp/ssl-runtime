@@ -21,7 +21,7 @@ public class FunctionLawTest {
     class FuncLawPolyBoolean extends FunctionLawBoolean {
         FuncLawPolyBoolean() {
             super();
-            addCase("x", "TRUE");
+            addCase("TRUE", "TRUE");
         }
     }
     @Test
