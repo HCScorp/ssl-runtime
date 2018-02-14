@@ -1,13 +1,15 @@
-package hcs.dsl.ssl.runtime.source;
+package hcs.dsl.ssl.runtime.law.file;
+
+import hcs.dsl.ssl.runtime.law.Law;
 
 import java.io.Serializable;
 
-public class RawFileSource<T extends Serializable> extends Source<T> {
+public class RawFileLaw<T extends Serializable> extends Law<T> {
 
     public final Pt<T>[] values;
     private int i = 0;
 
-    public RawFileSource(Pt<T>... values) {
+    public RawFileLaw(Pt<T>... values) {
         this.values = values;
     }
 

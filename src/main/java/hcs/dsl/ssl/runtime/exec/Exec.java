@@ -96,7 +96,7 @@ public class Exec implements Runnable {
             LocalDateTime offDate = LocalDateTime.parse(offsetStr, DTF);
             long offset = ChronoUnit.MILLIS.between(now, offDate) / 1000;
             for (AreaInstance ai : areaInstances) {
-                ai.applyOffset(offset);
+                ai.applyOffset(offset, now);
             }
         }
     }

@@ -1,7 +1,6 @@
 package hcs.dsl.ssl.runtime.sensor;
 
 import hcs.dsl.ssl.runtime.noise.Noise;
-import hcs.dsl.ssl.runtime.source.Source;
 
 public class NoisableSensor<T extends Number> extends Sensor<T> {
 

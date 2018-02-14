@@ -2,6 +2,7 @@ package hcs.dsl.ssl.runtime.area;
 
 import org.influxdb.InfluxDB;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +21,9 @@ public class AreaType implements Runnable {
         return name;
     }
 
-    public void applyOffset(long offset) {
+    public void applyOffset(long offset, LocalDateTime now) {
         for (SensorGroup sg : sensorGroups) {
-            sg.applyOffset(offset);
+            sg.applyOffset(offset, now);
         }
     }
 
@@ -52,7 +53,7 @@ public class AreaType implements Runnable {
                 t.join();
             }
         } catch (InterruptedException e) {
-            // TODO log?
+            // TODO log ?
         }
     }
 }

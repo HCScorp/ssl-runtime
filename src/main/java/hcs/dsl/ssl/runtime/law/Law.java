@@ -1,7 +1,7 @@
 package hcs.dsl.ssl.runtime.law;
 
 
-import hcs.dsl.ssl.runtime.source.Source;
+import hcs.dsl.ssl.runtime.sensor.Source;
 
 import java.io.Serializable;
 

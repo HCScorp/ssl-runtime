@@ -2,6 +2,8 @@ package hcs.dsl.ssl.runtime.area;
 
 import org.influxdb.InfluxDB;
 
+import java.time.LocalDateTime;
+
 public class AreaInstance implements Runnable {
 
     private final AreaType areaType;
@@ -12,8 +14,8 @@ public class AreaInstance implements Runnable {
         this.name = name;
     }
 
-    public void applyOffset(long offset) {
-        areaType.applyOffset(offset);
+    public void applyOffset(long offset, LocalDateTime now) {
+        areaType.applyOffset(offset, now);
     }
 
     public void configure(String execName, InfluxDB influxDB) {

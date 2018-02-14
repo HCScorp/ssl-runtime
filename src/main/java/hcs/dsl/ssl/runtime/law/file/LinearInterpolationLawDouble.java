@@ -1,10 +1,10 @@
-package hcs.dsl.ssl.runtime.source;
+package hcs.dsl.ssl.runtime.law.file;
 
 import com.udojava.evalex.Expression;
 
-public class InterpolatedSourceDouble extends InterpolatedSource<Double> {
+public class LinearInterpolationLawDouble extends LinearInterpolationLaw<Double> {
 
-    public InterpolatedSourceDouble(Expression expression) {
+    public LinearInterpolationLawDouble(Expression expression) {
         super(expression);
     }
 

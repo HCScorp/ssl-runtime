@@ -1,4 +1,4 @@
-package hcs.dsl.ssl.runtime.source;
+package hcs.dsl.ssl.runtime.sensor;
 
 import java.io.Serializable;
 

@@ -3,13 +3,17 @@ package hcs.dsl.ssl.runtime.area;
 import hcs.dsl.ssl.runtime.noise.Noise;
 import hcs.dsl.ssl.runtime.sensor.NoisableSensor;
 import hcs.dsl.ssl.runtime.sensor.Sensor;
-import hcs.dsl.ssl.runtime.source.Pt;
-import hcs.dsl.ssl.runtime.source.RawFileSource;
+import hcs.dsl.ssl.runtime.law.file.Pt;
+import hcs.dsl.ssl.runtime.law.file.RawFileLaw;
 import org.influxdb.InfluxDB;
 
 import java.lang.reflect.Constructor;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -54,9 +58,16 @@ public class SensorGroup implements Runnable {
         }
     }
 
-    public void applyOffset(long offset) {
+    public void applyOffset(long offset, LocalDateTime now) {
         for (Sensor s : sensors) {
-            s.setOffset(offset);
+            if (s.getSource() instanceof RawFileLaw) {
+                LocalDateTime start =
+                        LocalDateTime.ofInstant(Instant.ofEpochMilli(((RawFileLaw) s.getSource()).values[0].timestamp),
+                                TimeZone.getDefault().toZoneId());
+                s.setOffset(ChronoUnit.MILLIS.between(now, start) / 1000);
+            } else {
+                s.setOffset(offset);
+            }
         }
     }
 
@@ -71,7 +82,7 @@ public class SensorGroup implements Runnable {
         start = TimeUnit.MILLISECONDS.convert(start, TimeUnit.SECONDS);
         end = TimeUnit.MILLISECONDS.convert(end, TimeUnit.SECONDS);
 
-        if (sensors.get(0).getSource() instanceof RawFileSource) {
+        if (sensors.get(0).getSource() instanceof RawFileLaw) {
             processSourceFileRaw();
             return;
         }
@@ -89,7 +100,7 @@ public class SensorGroup implements Runnable {
 
     private void processSourceFileRaw() {
         System.out.println("Start feeding InfluxDB for sensors " + sensors.get(0).getName() + "");
-        RawFileSource rfs = (RawFileSource) sensors.get(0).getSource();
+        RawFileLaw rfs = (RawFileLaw) sensors.get(0).getSource();
         for (Sensor s : sensors) {
             for (Pt pt : rfs.values) {
                 s.process(pt.timestamp);

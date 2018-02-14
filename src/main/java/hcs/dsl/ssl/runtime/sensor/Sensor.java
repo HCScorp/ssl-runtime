@@ -1,8 +1,6 @@
 package hcs.dsl.ssl.runtime.sensor;
 
-import hcs.dsl.ssl.runtime.source.Source;
 import org.influxdb.InfluxDB;
-import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
 
 import java.io.Serializable;

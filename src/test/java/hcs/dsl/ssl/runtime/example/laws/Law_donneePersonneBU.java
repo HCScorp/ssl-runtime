@@ -1,12 +1,12 @@
-package hcs.dsl.ssl.runtime.example.file;
+package hcs.dsl.ssl.runtime.example.laws;
 
 
-import hcs.dsl.ssl.runtime.source.Pt;
-import hcs.dsl.ssl.runtime.source.RawFileSource;
+import hcs.dsl.ssl.runtime.law.file.Pt;
+import hcs.dsl.ssl.runtime.law.file.RawFileLaw;
 
-public class SourceFile_dataPersonneBU extends RawFileSource<Integer> {
-    public SourceFile_dataPersonneBU() {
-        super(
+public class Law_donneePersonneBU extends RawFileLaw<Integer> {
+    public Law_donneePersonneBU() {
+        super(// TODO add time metadata
                 new Pt<>(1518220800, 0),
                 new Pt<>(1518221000, 1),
                 new Pt<>(1518221200, 2),

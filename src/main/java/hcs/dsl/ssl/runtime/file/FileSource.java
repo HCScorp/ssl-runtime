@@ -2,7 +2,7 @@ package hcs.dsl.ssl.runtime.file;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.validator.UrlValidator;
-import hcs.dsl.ssl.runtime.source.Source;
+import hcs.dsl.ssl.runtime.sensor.Source;
 
 import java.io.File;
 import java.io.IOException;
