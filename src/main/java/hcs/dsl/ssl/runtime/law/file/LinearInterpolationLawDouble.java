@@ -4,8 +4,10 @@ import com.udojava.evalex.Expression;
 
 public class LinearInterpolationLawDouble extends LinearInterpolationLaw<Double> {
 
-    public LinearInterpolationLawDouble(Expression expression) {
-        super(expression);
+    public LinearInterpolationLawDouble(TimeMetadata timeMetadata,
+                                        Expression expression,
+                                        Restriction<Double> restriction) {
+        super(timeMetadata, expression, restriction);
     }
 
     @Override

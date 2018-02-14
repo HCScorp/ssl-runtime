@@ -4,9 +4,12 @@ import com.udojava.evalex.Expression;
 
 public class LinearInterpolationLawInteger extends LinearInterpolationLaw<Integer> {
 
-    public LinearInterpolationLawInteger(Expression expression) {
-        super(expression);
+    public LinearInterpolationLawInteger(TimeMetadata timeMetadata,
+                                        Expression expression,
+                                        Restriction<Integer> restriction) {
+        super(timeMetadata, expression, restriction);
     }
+
 
     @Override
     public Integer produceValue(long timestamp) {

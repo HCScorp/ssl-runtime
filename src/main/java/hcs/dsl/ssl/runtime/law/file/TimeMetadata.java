@@ -1,11 +1,16 @@
 package hcs.dsl.ssl.runtime.law.file;
 
 public class TimeMetadata {
-    public long min;
-    public long max;
+
+    private final long min;
+    private final long max;
 
     public TimeMetadata(long min, long max) {
         this.min = min;
         this.max = max;
+    }
+
+    public long apply(long timestamp) {
+        return (timestamp % (max - min)) + min;
     }
 }

@@ -14,16 +14,17 @@ public abstract class LinearInterpolationLaw<T extends Number> extends Law<T> {
     private final Expression expression;
     private final Restriction<T> restriction;
 
-    // TODO add restriction
-
-    public LinearInterpolationLaw(TimeMetadata timeMetadata, Expression expression, Restriction<T> restriction) {
+    public LinearInterpolationLaw(TimeMetadata timeMetadata,
+                                  Expression expression,
+                                  Restriction<T> restriction) {
         this.timeMetadata = timeMetadata;
         this.expression = expression;
         this.restriction = restriction;
     }
 
     protected BigDecimal eval(long timestamp) {
-        if (timestamp)
-        return expression.with(TIMESTAMP_VAR, BigDecimal.valueOf(timestamp)).eval();
+        timestamp = timeMetadata.apply(timestamp);
+        BigDecimal val = expression.with(TIMESTAMP_VAR, BigDecimal.valueOf(timestamp)).eval();
+        return restriction != null ? restriction.apply(val) : val;
     }
 }
