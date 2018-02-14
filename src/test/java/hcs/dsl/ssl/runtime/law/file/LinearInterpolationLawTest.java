@@ -11,5 +11,6 @@ public class LinearInterpolationLawTest {
     public void donneeVoitureTest() {
         Law_donneeVoiture l = new Law_donneeVoiture();
         assertEquals(2, l.produceValue(0).intValue());
+        assertEquals(0, l.produceValue(9).intValue());
     }
 }
