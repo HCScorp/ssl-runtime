@@ -6,7 +6,7 @@ import hcs.dsl.ssl.runtime.law.file.RawFileLaw;
 
 public class Law_donneePersonneBU extends RawFileLaw<Integer> {
     public Law_donneePersonneBU() {
-        super(// TODO add time metadata
+        super(
                 new Pt<>(1518220800, 0),
                 new Pt<>(1518221000, 1),
                 new Pt<>(1518221200, 2),
