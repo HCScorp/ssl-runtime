@@ -1,4 +1,4 @@
-package hcs.dsl.ssl.runtime.exec;
+package hcs.dsl.ssl.runtime.app;
 
 import hcs.dsl.ssl.runtime.area.AreaInstance;
 import org.influxdb.InfluxDB;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class Exec implements Runnable {
+public class App implements Runnable {
 
     public static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
@@ -21,7 +21,7 @@ public class Exec implements Runnable {
     private final String name;
     private InfluxDB influxDB;
 
-    public Exec(String name, Config conf, AreaInstance... areaInstances) {
+    public App(String name, Config conf, AreaInstance... areaInstances) {
         this.name = name;
         this.areaInstances = areaInstances;
         this.conf = conf;
