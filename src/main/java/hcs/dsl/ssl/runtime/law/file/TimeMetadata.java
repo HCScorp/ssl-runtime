@@ -13,4 +13,12 @@ public class TimeMetadata {
     public long apply(long timestamp) {
         return (timestamp % (max - min)) + min;
     }
+
+    public long getMin() {
+        return min;
+    }
+
+    public long getMax() {
+        return max;
+    }
 }
