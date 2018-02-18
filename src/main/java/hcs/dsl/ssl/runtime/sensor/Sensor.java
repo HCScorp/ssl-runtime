@@ -73,7 +73,7 @@ public class Sensor<T extends Serializable> implements Runnable {
         Point.Builder builder = Point.measurement(name)
                 .tag("areaType", areaType)
                 .tag("areaInstance", areaInstance)
-                .tag("exec", exec)
+                .tag("app", exec)
                 .tag("id", Integer.toString(java.lang.System.identityHashCode(this)))
                 .time(timestamp, TimeUnit.SECONDS);
 

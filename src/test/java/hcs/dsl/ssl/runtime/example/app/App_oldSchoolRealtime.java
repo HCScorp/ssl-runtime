@@ -1,17 +1,17 @@
-package hcs.dsl.ssl.runtime.example.exec;
+package hcs.dsl.ssl.runtime.example.app;
 
 import hcs.dsl.ssl.runtime.area.AreaInstance;
 import hcs.dsl.ssl.runtime.example.areas.Area_bureau;
 import hcs.dsl.ssl.runtime.example.areas.Area_parking;
 import hcs.dsl.ssl.runtime.example.areas.Area_salleDeClasse;
-import hcs.dsl.ssl.runtime.exec.Config;
-import hcs.dsl.ssl.runtime.exec.Exec;
+import hcs.dsl.ssl.runtime.app.App;
+import hcs.dsl.ssl.runtime.app.Config;
 
-public class Exec_oldSchool extends Exec {
+public class App_oldSchoolRealtime extends App {
 
-    public Exec_oldSchool() {
-        super("oldSchoold",
-                new Config(false, null, "13/02/2018 12:00", "13/02/2018 14:00"),
+    public App_oldSchoolRealtime() {
+        super("oldSchoolRealtime",
+                new Config(true, null, null, null),
 
                 new AreaInstance(new Area_parking(), "P1"),
                 new AreaInstance(new Area_parking(), "P2"),
