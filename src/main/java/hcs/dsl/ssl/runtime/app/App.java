@@ -69,7 +69,7 @@ public class App implements Runnable {
         try {
             Thread.currentThread().join();
         } catch (InterruptedException e) {
-            // TODO log error?
+            // TODO log?
         }
     }
 

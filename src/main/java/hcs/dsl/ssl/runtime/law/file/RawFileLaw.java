@@ -4,7 +4,7 @@ import hcs.dsl.ssl.runtime.law.Law;
 
 import java.io.Serializable;
 
-public class RawFileLaw<T extends Serializable> extends Law<T> {
+public class RawFileLaw<T extends Serializable> extends Law<T> implements TimeMetadataOwner {
 
     private final TimeMetadata timeMetadata;
 

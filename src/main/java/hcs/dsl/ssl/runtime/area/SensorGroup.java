@@ -1,5 +1,7 @@
 package hcs.dsl.ssl.runtime.area;
 
+import hcs.dsl.ssl.runtime.law.file.LinearInterpolationLaw;
+import hcs.dsl.ssl.runtime.law.file.TimeMetadataOwner;
 import hcs.dsl.ssl.runtime.noise.Noise;
 import hcs.dsl.ssl.runtime.sensor.NoisableSensor;
 import hcs.dsl.ssl.runtime.sensor.Sensor;
@@ -60,11 +62,11 @@ public class SensorGroup implements Runnable {
 
     public void applyOffset(long offset, LocalDateTime now) {
         for (Sensor s : sensors) {
-            if (s.getSource() instanceof RawFileLaw) {
+            if (s.getSource() instanceof TimeMetadataOwner) {
                 LocalDateTime start =
                         LocalDateTime.ofInstant(
                                 Instant.ofEpochMilli(
-                                        ((RawFileLaw) s.getSource()).getTimeMetadata().getMin()),
+                                        ((TimeMetadataOwner) s.getSource()).getTimeMetadata().getMin()),
                                 TimeZone.getDefault().toZoneId());
                 s.setOffset(ChronoUnit.MILLIS.between(now, start) / 1000);
             } else {

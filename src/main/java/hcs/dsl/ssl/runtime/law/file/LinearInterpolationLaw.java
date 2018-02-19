@@ -6,7 +6,7 @@ import hcs.dsl.ssl.runtime.sensor.Source;
 
 import java.math.BigDecimal;
 
-public abstract class LinearInterpolationLaw<T extends Number> extends Law<T> {
+public abstract class LinearInterpolationLaw<T extends Number> extends Law<T>  implements TimeMetadataOwner {
 
     public static final String TIMESTAMP_VAR = "x";
 
@@ -23,10 +23,13 @@ public abstract class LinearInterpolationLaw<T extends Number> extends Law<T> {
     }
 
     protected BigDecimal eval(long timestamp) {
-        // TODO use the minimum timestamp for offset ?
-
         timestamp = timeMetadata.apply(timestamp);
         BigDecimal val = expression.with(TIMESTAMP_VAR, BigDecimal.valueOf(timestamp)).eval();
         return restriction != null ? restriction.apply(val) : val;
+    }
+
+    @Override
+    public TimeMetadata getTimeMetadata() {
+        return timeMetadata;
     }
 }
