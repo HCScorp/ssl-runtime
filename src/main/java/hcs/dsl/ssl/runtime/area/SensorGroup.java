@@ -1,6 +1,5 @@
 package hcs.dsl.ssl.runtime.area;
 
-import hcs.dsl.ssl.runtime.law.file.LinearInterpolationLaw;
 import hcs.dsl.ssl.runtime.law.file.TimeMetadataOwner;
 import hcs.dsl.ssl.runtime.noise.Noise;
 import hcs.dsl.ssl.runtime.sensor.NoisableSensor;

@@ -87,7 +87,6 @@ public class Sensor<T extends Serializable> implements Runnable {
             // TODO error ? impossibru
         }
 
-
         influxDB.write(builder.build());
     }
 }
