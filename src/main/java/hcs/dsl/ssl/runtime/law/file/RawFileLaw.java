@@ -23,8 +23,20 @@ public class RawFileLaw<T extends Serializable> extends Law<T> {
     @Override
     public T produceValue(long timestamp) {
         if (i >= values.length) {
-            return null;
+            i = 0;
         }
         return values[i++].value;
+    }
+
+    public long nextWait() {
+        if (i >= values.length - 1) {
+            return values[values.length-1].timestamp - values[values.length-2].timestamp;
+        }
+
+        return values[i+1].timestamp - values[i].timestamp;
+    }
+
+    public long currTimestamp() {
+        return values[i].timestamp;
     }
 }

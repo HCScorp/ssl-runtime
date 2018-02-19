@@ -103,23 +103,21 @@ public class SensorGroup implements Runnable {
     private void processSourceFileRaw() {
         System.out.println("Start feeding InfluxDB for sensors " + sensors.get(0).getName() + "");
 
-        // TODO offset handling?
-
-        RawFileLaw rfs = (RawFileLaw) sensors.get(0).getSource();
+        RawFileLaw rfl = (RawFileLaw) sensors.get(0).getSource();
         for (Sensor s : sensors) {
-            for (Pt pt : rfs.values) {
+            for (Pt pt : rfl.values) {
                 s.process(pt.timestamp);
             }
         }
     }
 
     private void processSourceFileRawRealtime() {
-        // TODO method waitTillNext() that get the duration between the next two interval using a loopIterator
-        //        Pour le mode realtime, on va définir de la meme maniere la date de départ
-        // en fonction de la plus vieille que contient le fichier pour le capteur donnée,
-        // puis on va envoyer les valeurs qu’il contient en bouclant en ne prenant pas en compte le timestamp présent
-        // dans le fichier mais seulement les durée entre chaque updates
-        // TODO
+        for (Sensor s : sensors) {
+            RawFileLaw rfl = (RawFileLaw) s.getSource();
+            new Thread(
+                    new NextTimer(rfl::currTimestamp, s::process, rfl::nextWait)
+            ).start();
+        }
     }
 
     @Override

@@ -30,6 +30,7 @@ public abstract class MarkovLaw<T extends Serializable> extends Law<T> {
         edgeMap.get(value).put(target, proba);
     }
 
+    @Override
     public T produceValue(long timestamp) {
         TreeMap<T, Double> tMap = edgeMap.get(current);
         Double totalWeight = tMap.entrySet().stream().mapToDouble(Map.Entry::getValue).sum();

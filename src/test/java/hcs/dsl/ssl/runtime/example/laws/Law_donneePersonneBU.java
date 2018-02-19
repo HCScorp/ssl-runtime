@@ -3,10 +3,11 @@ package hcs.dsl.ssl.runtime.example.laws;
 
 import hcs.dsl.ssl.runtime.law.file.Pt;
 import hcs.dsl.ssl.runtime.law.file.RawFileLaw;
+import hcs.dsl.ssl.runtime.law.file.TimeMetadata;
 
 public class Law_donneePersonneBU extends RawFileLaw<Integer> {
     public Law_donneePersonneBU() {
-        super(
+        super(new TimeMetadata(1518220800, 1518223280),
                 new Pt<>(1518220800, 0),
                 new Pt<>(1518221000, 1),
                 new Pt<>(1518221200, 2),
