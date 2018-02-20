@@ -6,7 +6,7 @@ import hcs.dsl.ssl.runtime.law.file.LinearInterpolationLawInteger;
 import hcs.dsl.ssl.runtime.law.file.Restriction;
 import hcs.dsl.ssl.runtime.law.file.TimeMetadata;
 
-public class Law_donneeVoiture extends LinearInterpolationLawInteger { // Type defined by the value of the file
+public class Law_donneeVoiture extends LinearInterpolationLawInteger {
 
     public Law_donneeVoiture() {
         super(new TimeMetadata(0, 100),

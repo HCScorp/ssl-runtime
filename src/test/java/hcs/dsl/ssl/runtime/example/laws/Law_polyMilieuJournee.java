@@ -1,8 +1,8 @@
 package hcs.dsl.ssl.runtime.example.laws;
 
-import hcs.dsl.ssl.runtime.law.function.FunctionLawDouble;
+import hcs.dsl.ssl.runtime.law.function.FunctionLawExpr;
 
-public class Law_polyMilieuJournee extends FunctionLawDouble {
+public class Law_polyMilieuJournee extends FunctionLawExpr {
 
     public Law_polyMilieuJournee() {
         super();

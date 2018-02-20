@@ -80,7 +80,6 @@ public class SensorGroup implements Runnable {
         }
     }
 
-
     public void process(long start, long end) {
         start = TimeUnit.MILLISECONDS.convert(start, TimeUnit.SECONDS);
         end = TimeUnit.MILLISECONDS.convert(end, TimeUnit.SECONDS);
