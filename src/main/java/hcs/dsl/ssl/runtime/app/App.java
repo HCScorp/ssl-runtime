@@ -29,7 +29,10 @@ public class App implements Runnable {
 
     @Override
     public void run() {
-        influxDB = InfluxDBFactory.connect("http://62.210.181.35:5057", "admin", "");
+        influxDB = InfluxDBFactory.connect(
+                System.getenv("SSL_INFLUX_ADDRESS"),
+                System.getenv("SSL_INFLUX_USER"),
+                System.getenv("SSL_INFLUX_PWD"));
         influxDB.setDatabase("ssl");
 
         for (AreaInstance ai : areaInstances) {
