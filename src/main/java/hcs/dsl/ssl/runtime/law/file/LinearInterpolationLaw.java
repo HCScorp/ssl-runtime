@@ -2,13 +2,12 @@ package hcs.dsl.ssl.runtime.law.file;
 
 import com.udojava.evalex.Expression;
 import hcs.dsl.ssl.runtime.law.Law;
-import hcs.dsl.ssl.runtime.sensor.Source;
 
 import java.math.BigDecimal;
 
 public abstract class LinearInterpolationLaw<T extends Number> extends Law<T>  implements TimeMetadataOwner {
 
-    public static final String TIMESTAMP_VAR = "x";
+    public static final String TS_VAR = "x";
 
     private final TimeMetadata timeMetadata;
     private final Expression expression;
@@ -24,7 +23,7 @@ public abstract class LinearInterpolationLaw<T extends Number> extends Law<T>  i
 
     protected BigDecimal eval(long timestamp) {
         timestamp = timeMetadata.apply(timestamp);
-        BigDecimal val = expression.with(TIMESTAMP_VAR, BigDecimal.valueOf(timestamp)).eval();
+        BigDecimal val = expression.with(TS_VAR, BigDecimal.valueOf(timestamp)).eval();
         return restriction != null ? restriction.apply(val) : val;
     }
 

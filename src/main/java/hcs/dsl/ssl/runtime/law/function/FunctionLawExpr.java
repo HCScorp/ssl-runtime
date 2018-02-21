@@ -49,4 +49,9 @@ public abstract class FunctionLawExpr extends FunctionLaw<Double> {
 
         return val.doubleValue();
     }
+
+    @Override
+    protected Double getDefault() {
+        return 0.0;
+    }
 }

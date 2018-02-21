@@ -10,7 +10,6 @@ public class LinearInterpolationLawInteger extends LinearInterpolationLaw<Intege
         super(timeMetadata, expression, restriction);
     }
 
-
     @Override
     public Integer produceValue(long timestamp) {
         return eval(timestamp).intValue();

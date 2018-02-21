@@ -15,7 +15,6 @@ public abstract class RandomLawArray<T extends Serializable> extends Law<T> {
         this.size = elements.length;
     }
 
-
     @Override
     public T produceValue(long timestamp) {
         return array[ThreadLocalRandom.current().nextInt(size)];
