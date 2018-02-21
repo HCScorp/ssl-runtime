@@ -11,11 +11,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 public class App implements Runnable {
-    private final static Logger LOG = Logger.getLogger("App");
-
+    
     public static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     private final AreaInstance[] areaInstances;
@@ -34,26 +32,26 @@ public class App implements Runnable {
         String address = System.getenv("SSL_INFLUXDB_ADDRESS");
         String db = System.getenv("SSL_INFLUXDB_DB");
 
-        LOG.info("connecting to influxdb " + address);
+        System.out.println("connecting to influxdb " + address);
         influxDB = InfluxDBFactory.connect(
                 address,
                 System.getenv("SSL_INFLUXDB_USER"),
                 System.getenv("SSL_INFLUXDB_PWD"));
 
-        LOG.info("setting db '" + db + "'");
+        System.out.println("setting db '" + db + "'");
         influxDB.setDatabase(db);
 
-        LOG.info("successfully connected to influxdb " + address + " on db " + db);
+        System.out.println("successfully connected to influxdb " + address + " on db " + db);
 
         for (AreaInstance ai : areaInstances) {
             ai.configure(name, influxDB);
         }
 
         if (conf.isRealtime()) {
-            LOG.info("starting simulation in realtime mode");
+            System.out.println("starting simulation in realtime mode");
             runRealtime();
         } else {
-            LOG.info("starting simulation in replay mode");
+            System.out.println("starting simulation in replay mode");
             runReplay();
         }
 
@@ -67,7 +65,7 @@ public class App implements Runnable {
 
         List<Thread> threads = new ArrayList<>();
         for (AreaInstance ai : areaInstances) {
-            LOG.info("starting area " + ai.getAreaType() + ":" + ai.getName() + "");
+            System.out.println("starting area " + ai.getAreaType() + ":" + ai.getName() + "");
             Thread t = new Thread(ai);
             threads.add(t);
             t.start();
