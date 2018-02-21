@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class App implements Runnable {
-    
+
     public static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     private final AreaInstance[] areaInstances;
@@ -65,7 +65,7 @@ public class App implements Runnable {
 
         List<Thread> threads = new ArrayList<>();
         for (AreaInstance ai : areaInstances) {
-            System.out.println("starting area " + ai.getAreaType() + ":" + ai.getName() + "");
+            System.out.println("starting area " + ai.getAreaType().getName() + ":" + ai.getName() + "");
             Thread t = new Thread(ai);
             threads.add(t);
             t.start();
@@ -98,7 +98,7 @@ public class App implements Runnable {
         long endTs = end.atZone(ZoneId.systemDefault()).toEpochSecond();
 
         for (AreaInstance ai : areaInstances) {
-            System.out.println("Generating data for area instance: " + ai.getName() + " (" + ai.getAreaType().getName() + ")");
+            System.out.println("generating data for area " + ai.getAreaType().getName() + ":" + ai.getName());
             ai.process(startTs, endTs);
         }
     }
