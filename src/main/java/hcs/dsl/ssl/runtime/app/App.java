@@ -30,10 +30,10 @@ public class App implements Runnable {
     @Override
     public void run() {
         influxDB = InfluxDBFactory.connect(
-                System.getenv("SSL_INFLUX_ADDRESS"),
-                System.getenv("SSL_INFLUX_USER"),
-                System.getenv("SSL_INFLUX_PWD"));
-        influxDB.setDatabase("ssl");
+                System.getenv("SSL_INFLUXDB_ADDRESS"),
+                System.getenv("SSL_INFLUXDB_USER"),
+                System.getenv("SSL_INFLUXDB_PWD"));
+        influxDB.setDatabase(System.getenv("SSL_INFLUXDB_DB"));
 
         for (AreaInstance ai : areaInstances) {
             ai.configure(name, influxDB);
