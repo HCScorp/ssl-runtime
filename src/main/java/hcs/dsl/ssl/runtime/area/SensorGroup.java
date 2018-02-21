@@ -59,6 +59,22 @@ public class SensorGroup implements Runnable {
         }
     }
 
+    public String getSensorName() {
+        if (sensors == null || sensors.isEmpty()) {
+            return "";
+        }
+
+        return sensors.get(0).getName();
+    }
+
+    public int getQuantity() {
+        if (sensors == null) {
+            return 0;
+        }
+
+        return sensors.size();
+    }
+
     public void applyOffset(long offset, LocalDateTime now) {
         for (Sensor s : sensors) {
             if (s.getSource() instanceof TimeMetadataOwner) {

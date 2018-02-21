@@ -5,9 +5,12 @@ import org.influxdb.InfluxDB;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 
 public class AreaType implements Runnable {
+
+    private final static Logger LOG = Logger.getLogger("Area");
 
     private final SensorGroup[] sensorGroups;
     private final String name;
@@ -43,6 +46,7 @@ public class AreaType implements Runnable {
     public void run() {
         List<Thread> threads = new ArrayList<>();
         for (SensorGroup sg : sensorGroups) {
+            LOG.info("starting sensor group " + sg.getSensorName() + ":" + sg.getQuantity());
             Thread t = new Thread(sg);
             threads.add(t);
             t.start();
