@@ -3,6 +3,7 @@ package hcs.dsl.ssl.runtime.app;
 import hcs.dsl.ssl.runtime.area.AreaInstance;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.Pong;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -38,10 +39,21 @@ public class App implements Runnable {
                 System.getenv("SSL_INFLUXDB_USER"),
                 System.getenv("SSL_INFLUXDB_PWD"));
 
-        System.out.println("setting db '" + db + "'");
-        influxDB.setDatabase(db);
+        Pong pong = influxDB.ping();
+        if (pong == null) {
+            throw new IllegalStateException("failed to connect to influxdb" + address);
+        }
 
         System.out.println("successfully connected to influxdb " + address + " on db " + db);
+
+        System.out.println("setting db '" + db + "'");
+        if (!influxDB.databaseExists(db)) {
+            System.out.println("db not found, creating db '" + db + "'");
+            influxDB.createDatabase(db);
+        }
+        influxDB.setDatabase(db);
+
+        System.out.println("successfully set db '" + db + "'");
 
         for (AreaInstance ai : areaInstances) {
             ai.configure(name, influxDB);
