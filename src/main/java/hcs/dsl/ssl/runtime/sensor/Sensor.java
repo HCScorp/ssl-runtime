@@ -9,10 +9,8 @@ import java.util.concurrent.TimeUnit;
 public class Sensor<T extends Serializable> implements Runnable {
 
     private final String name;
-    private final Source<T> source; // a well defined law OR a complete CSV,
+    private final Source<T> source;
     private final long periodMs;
-
-//    private long internalOffset;
 
     private String areaInstance;
     private String areaType;
@@ -21,19 +19,14 @@ public class Sensor<T extends Serializable> implements Runnable {
     private long offset = 0;
 
     private InfluxDB influxDB;
+    private final String id;
 
-    public Sensor(String name, Source<T> source, long periodMs) { //  String internalOffset,
+    public Sensor(String name, Source<T> source, long periodMs) {
         this.name = name;
         this.source = source;
         this.periodMs = periodMs;
-//        this.internalOffset = timestampOf(internalOffset);
+        this.id = Integer.toString(java.lang.System.identityHashCode(this));
     }
-//
-//    private long timestampOf(String internalOffset) {
-//        LocalDateTime epoch = LocalDateTime.parse(internalOffset, Exec.DTF);
-//
-//        return epoch.atZone(ZoneId.systemDefault()).toEpochSecond();
-//    }
 
     public void setOffset(long offset) {
         this.offset = offset;
@@ -74,7 +67,7 @@ public class Sensor<T extends Serializable> implements Runnable {
                 .tag("areaType", areaType)
                 .tag("areaInstance", areaInstance)
                 .tag("app", exec)
-                .tag("id", Integer.toString(java.lang.System.identityHashCode(this)))
+                .tag("id", id)
                 .time(timestamp, TimeUnit.SECONDS);
 
         if (val instanceof Number) {
@@ -83,8 +76,6 @@ public class Sensor<T extends Serializable> implements Runnable {
             builder.addField("value", (Boolean) val);
         } else if (val instanceof String) {
             builder.addField("value", (String) val);
-        } else {
-            // TODO error ? impossibru
         }
 
         influxDB.write(builder.build());

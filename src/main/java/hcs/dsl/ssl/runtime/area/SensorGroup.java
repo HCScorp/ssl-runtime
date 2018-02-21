@@ -107,7 +107,7 @@ public class SensorGroup implements Runnable {
 
         long period = sensors.get(0).getPeriodMs();
 
-        System.out.println("Start feeding InfluxDB for sensors " + sensors.get(0).getName() + " (period: " + period + "ms)");
+        System.out.println("start feeding db for sensors " + sensors.get(0).getName() + " (period: " + period + "ms)");
 
         for (long i = start; i < end; i += period) {
             for (Sensor s : sensors) {
