@@ -1,7 +1,5 @@
 package hcs.dsl.ssl.runtime.law.file;
 
-import java.math.BigDecimal;
-
 public class Restriction<T extends Number> {
 
     private final Double min;
@@ -12,12 +10,11 @@ public class Restriction<T extends Number> {
         this.max = max.doubleValue();
     }
 
-    public BigDecimal apply(BigDecimal value) {
-        double val = value.doubleValue();
-        if (val > max) {
-            return BigDecimal.valueOf(max);
-        } else if (val < min) {
-            return BigDecimal.valueOf(min);
+    public Double apply(Double value) {
+        if (value > max) {
+            return max;
+        } else if (value < min) {
+            return min;
         }
 
         return value;

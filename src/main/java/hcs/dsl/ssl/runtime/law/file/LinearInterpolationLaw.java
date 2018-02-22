@@ -1,29 +1,28 @@
 package hcs.dsl.ssl.runtime.law.file;
 
-import com.udojava.evalex.Expression;
 import hcs.dsl.ssl.runtime.law.Law;
-
-import java.math.BigDecimal;
+import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
+import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 
 public abstract class LinearInterpolationLaw<T extends Number> extends Law<T>  implements TimeMetadataOwner {
 
-    public static final String TS_VAR = "x";
-
     private final TimeMetadata timeMetadata;
-    private final Expression expression;
+    private final PolynomialSplineFunction function;
     private final Restriction<T> restriction;
 
     public LinearInterpolationLaw(TimeMetadata timeMetadata,
-                                  Expression expression,
-                                  Restriction<T> restriction) {
+                                  Restriction<T> restriction,
+                                  double[] knots,
+                                  PolynomialFunction... polynomials) {
         this.timeMetadata = timeMetadata;
-        this.expression = expression;
+        this.timeMetadata.setInterpolate();
+        this.function = new PolynomialSplineFunction(knots, polynomials);
         this.restriction = restriction;
     }
 
-    protected BigDecimal eval(long timestamp) {
+    protected Double eval(long timestamp) {
         timestamp = timeMetadata.apply(timestamp);
-        BigDecimal val = expression.with(TS_VAR, BigDecimal.valueOf(timestamp)).eval();
+        double val = function.value((double) timestamp);
         return restriction != null ? restriction.apply(val) : val;
     }
 
