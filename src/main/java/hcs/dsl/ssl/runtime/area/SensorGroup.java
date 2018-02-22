@@ -117,7 +117,7 @@ public class SensorGroup implements Runnable {
     }
 
     private void processSourceFileRaw() {
-        System.out.println("Start feeding InfluxDB for sensors " + sensors.get(0).getName() + "");
+        System.out.println("start feeding InfluxDB for sensors " + sensors.get(0).getName() + "");
 
         RawFileLaw rfl = (RawFileLaw) sensors.get(0).getSource();
         for (Sensor s : sensors) {
