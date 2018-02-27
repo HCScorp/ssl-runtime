@@ -1,27 +1,27 @@
 package hcs.dsl.ssl.runtime.area;
 
-import hcs.dsl.ssl.runtime.law.file.TimeMetadataOwner;
 import hcs.dsl.ssl.runtime.noise.Noise;
 import hcs.dsl.ssl.runtime.sensor.NoisableSensor;
 import hcs.dsl.ssl.runtime.sensor.Sensor;
 import hcs.dsl.ssl.runtime.law.file.Pt;
 import hcs.dsl.ssl.runtime.law.file.RawFileLaw;
+import hcs.dsl.ssl.runtime.sensor.Source;
 import org.influxdb.InfluxDB;
 
 import java.lang.reflect.Constructor;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class SensorGroup implements Runnable {
 
-    private List<Sensor> sensors = new ArrayList<>();
+    private final List<Sensor> sensors = new ArrayList<>();
+    private final Sensor firstSensor;
+    private final String sensorName;
+    private final Source sensorSource;
 
     public <T extends Number> SensorGroup(int number,
                                           Class<? extends NoisableSensor<T>> sensorClass,
@@ -42,6 +42,10 @@ public class SensorGroup implements Runnable {
 
             sensors.add(s);
         }
+
+        firstSensor = sensors.get(0);
+        sensorName = firstSensor.getName();
+        sensorSource = firstSensor.getSource();
     }
 
     public SensorGroup(int number, Class<? extends Sensor> sensorClass) {
@@ -57,57 +61,41 @@ public class SensorGroup implements Runnable {
 
             sensors.add(s);
         }
+
+        firstSensor = sensors.get(0);
+        sensorName = firstSensor.getName();
+        sensorSource = firstSensor.getSource();
     }
 
     public String getSensorName() {
-        if (sensors == null || sensors.isEmpty()) {
-            return "";
-        }
-
-        return sensors.get(0).getName();
+        return sensorName;
     }
 
     public int getQuantity() {
-        if (sensors == null) {
-            return 0;
-        }
-
-        return sensors.size();
+        return sensors == null ? 0 : sensors.size();
     }
 
     public void applyOffset(long offset, LocalDateTime now) {
-        for (Sensor s : sensors) {
-            if (s.getSource() instanceof TimeMetadataOwner) {
-                LocalDateTime start =
-                        LocalDateTime.ofInstant(
-                                Instant.ofEpochMilli(
-                                        ((TimeMetadataOwner) s.getSource()).getTimeMetadata().getMin()),
-                                TimeZone.getDefault().toZoneId());
-                s.setOffset(ChronoUnit.MILLIS.between(now, start) / 1000);
-            } else {
-                s.setOffset(offset);
-            }
-        }
+        sensors.forEach(s -> s.setOffset(offset, now));
     }
 
     public void configure(String execName, String areaInstance, String areaType, InfluxDB influxDB) {
-        for (Sensor s : sensors) {
-            s.configure(execName, areaInstance, areaType, influxDB);
-        }
+        sensors.forEach(s -> s.configure(execName, areaInstance, areaType, influxDB));
     }
 
     public void process(long start, long end) {
         start = TimeUnit.MILLISECONDS.convert(start, TimeUnit.SECONDS);
         end = TimeUnit.MILLISECONDS.convert(end, TimeUnit.SECONDS);
 
-        if (sensors.get(0).getSource() instanceof RawFileLaw) {
+        // quick and dirty but isolated to SensorGroup class
+        if (sensorSource instanceof RawFileLaw) {
             processSourceFileRaw();
             return;
         }
 
-        long period = sensors.get(0).getPeriodMs();
+        long period = firstSensor.getPeriodMs();
 
-        System.out.println("start feeding db for sensors " + sensors.get(0).getName() + " (period: " + period + "ms)");
+        System.out.println("start feeding db for sensors " + sensorName + " (period: " + period + "ms)");
 
         for (long i = start; i < end; i += period) {
             for (Sensor s : sensors) {
@@ -117,9 +105,9 @@ public class SensorGroup implements Runnable {
     }
 
     private void processSourceFileRaw() {
-        System.out.println("start feeding InfluxDB for sensors " + sensors.get(0).getName() + "");
+        System.out.println("start feeding InfluxDB for sensors " + sensorName + "");
 
-        RawFileLaw rfl = (RawFileLaw) sensors.get(0).getSource();
+        RawFileLaw rfl = (RawFileLaw) sensorSource;
         for (Sensor s : sensors) {
             for (Pt pt : rfl.values) {
                 s.process(pt.timestamp);
@@ -138,13 +126,12 @@ public class SensorGroup implements Runnable {
 
     @Override
     public void run() {
-        if (sensors.get(0).getSource() instanceof RawFileLaw) {
+        // quick and dirty but isolated to SensorGroup class
+        if (sensorSource instanceof RawFileLaw) {
             processSourceFileRawRealtime();
         } else {
             ScheduledExecutorService executor = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
-            for (Sensor s : sensors) {
-                executor.scheduleAtFixedRate(s, 0, s.getPeriodMs(), TimeUnit.MILLISECONDS);
-            }
+            sensors.forEach(s -> executor.scheduleAtFixedRate(s, 0, s.getPeriodMs(), TimeUnit.MILLISECONDS));
         }
     }
 }

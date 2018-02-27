@@ -52,8 +52,6 @@ public class AreaType implements Runnable {
             for (Thread t : threads) {
                 t.join();
             }
-        } catch (InterruptedException e) {
-            // TODO log ?
-        }
+        } catch (InterruptedException ignored) {}
     }
 }

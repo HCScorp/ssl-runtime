@@ -87,15 +87,11 @@ public class App implements Runnable {
             for (Thread t : threads) {
                 t.join();
             }
-        } catch (InterruptedException e) {
-            // TODO log?
-        }
+        } catch (InterruptedException ignored) {}
 
         try {
             Thread.currentThread().join();
-        } catch (InterruptedException e) {
-            // TODO log?
-        }
+        } catch (InterruptedException ignored) {}
     }
 
     private void runReplay() {

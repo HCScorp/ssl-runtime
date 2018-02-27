@@ -1,9 +1,14 @@
 package hcs.dsl.ssl.runtime.sensor;
 
+import hcs.dsl.ssl.runtime.law.file.TimeMetadataOwner;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Point;
 
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 public class Sensor<T extends Serializable> implements Runnable {
@@ -31,6 +36,20 @@ public class Sensor<T extends Serializable> implements Runnable {
     public void setOffset(long offset) {
         this.offset = offset;
     }
+
+    public void setOffset(long offset, LocalDateTime now) {
+        if (source instanceof TimeMetadataOwner) { // quick and dirty but isolated to Sensor class
+            LocalDateTime start =
+                    LocalDateTime.ofInstant(
+                            Instant.ofEpochMilli(
+                                    ((TimeMetadataOwner) source).getTimeMetadata().getMin()),
+                            TimeZone.getDefault().toZoneId());
+            setOffset(ChronoUnit.MILLIS.between(now, start) / 1000);
+        } else {
+            setOffset(offset);
+        }
+    }
+
 
     public void configure(String execName, String areaInstance, String areaType, InfluxDB influxDB) {
         this.exec = execName;
@@ -70,6 +89,7 @@ public class Sensor<T extends Serializable> implements Runnable {
                 .tag("id", id)
                 .time(timestamp, TimeUnit.SECONDS);
 
+        // quick and dirty but isolated to Sensor class
         if (val instanceof Number) {
             builder.addField("value", (Number) val);
         } else if (val instanceof Boolean) {
